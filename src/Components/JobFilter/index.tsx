@@ -2,52 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ClearIcon from "@mui/icons-material/Clear";
 
-const roles: string[] = [
-  "Frontend",
-  "Backend",
-  "Fullstack",
-  "IOS",
-  "Flutter",
-  "React Native",
-  "Android",
-  "Tech Lead",
-  "Dev Ops",
-  "Data Engineer",
-  "Data Science",
-  "Computer Vision",
-  "Nlp",
-  "Deep Learning",
-  "Test / Qa",
-  "Web3",
-  "Sre",
-  "Data Infrastructure",
-  "Designer",
-  "Design Manager",
-  "Graphic Designer",
-  "Producct Designer",
-  "Product Designer",
-  "Operations Manager",
-  "Founder's Office/ Cheif of Staff",
-  "Sales Development Representative",
-  "Account Executive",
-  "Account Manager",
-  "Digital Marketing Manager",
-  "Growth Hacker",
-  "Marketing",
-  "Product Marketing Manager",
-  "Hardware",
-  "Mechanical",
-  "Systems",
-  "Business Analyst",
-  "Data Analyst",
-  "Project Manager",
-  "Management",
-  "Legal",
-  "Hr",
-  "Finance",
-];
+type JobFilterPropsType = {
+  options: string[];
+  placeholderText: string;
+};
 
-const JobFilter = () => {
+const JobFilter = ({ placeholderText, options }: JobFilterPropsType) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -69,12 +29,12 @@ const JobFilter = () => {
   useEffect(() => {
     const fetchRoles = () => {
       if (searchTerm.trim() === "") {
-        setSuggestions(roles);
+        setSuggestions(options);
         return;
       }
 
-      const filteredOptions = roles.filter((role) =>
-        role.toLowerCase().includes(searchTerm.toLowerCase())
+      const filteredOptions = options.filter((option) =>
+        option.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setSuggestions(filteredOptions);
     };
@@ -84,7 +44,7 @@ const JobFilter = () => {
   const handleSelectItem = (suggestion: string) => {
     setSelectedItems([...selectedItems, suggestion]);
     setSelectedItemsSet(new Set([...selectedItems, suggestion]));
-    setSuggestions(roles);
+    setSuggestions(options);
     setSearchTerm("");
     setOpen(false);
   };
@@ -142,7 +102,9 @@ const JobFilter = () => {
         ) : (
           <></>
         )}
-        {selectedItems.length === 0 && <div className="placeholder">Roles</div>}
+        {selectedItems.length === 0 && (
+          <div className="placeholder">{placeholderText}</div>
+        )}
         <div>
           <input
             type="text"
